@@ -22,8 +22,10 @@ const DiaryWriter = () => {
 
     const titleRef = useRef<HTMLInputElement>(null)
 
+    // 제목 입력 필드에 DOM 시점 고정
     useEffect(() => titleRef.current?.focus(), [])
 
+    // 입력 폼 유효성 검사
     useEffect(() => {
         const hasInvalidFields =
             title.length < minTitleLength ||
@@ -34,6 +36,7 @@ const DiaryWriter = () => {
         setIsValid(!hasInvalidFields)
     }, [title, content, weather, emotion])
 
+    // 입력 폼 필드 값 리셋 함수
     const resetDiaryValue = () => {
         setTitle('')
         setContent('')
