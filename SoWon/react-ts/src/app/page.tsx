@@ -1,4 +1,4 @@
-import { useState, useEffect, FormEvent } from 'react'
+import { useState, useEffect, FormEvent, useRef } from 'react'
 import { Diary } from '../interface/diary'
 import { Link } from 'react-router-dom'
 import { Button } from '../components/Button'
@@ -19,6 +19,10 @@ const DiaryWriter = () => {
     const { addDiary } = useDiaryManager()
     const minTitleLength: number = 3
     const minContentLength: number = 6
+
+    const titleRef = useRef<HTMLInputElement>(null)
+
+    useEffect(() => titleRef.current?.focus(), [])
 
     useEffect(() => {
         const hasInvalidFields =
@@ -66,6 +70,7 @@ const DiaryWriter = () => {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="제목을 적어보세요"
+                ref={titleRef}
             />
             <div className="flex flex-col gap-2 pt-4">
                 <div className="flex flex-row gap-1">
