@@ -10,7 +10,7 @@ export const Button: React.FC<ButtonProps> = ({ isValid, onClick, children }) =>
     return (
         <button
             type={isValid ? 'submit' : 'button'}
-            className={isValid ? 'btn btn-valid w-full' : 'btn btn-invalid w-full'}
+            className={`${isValid ? 'btn btn-green' : 'btn btn-gray'} w-full`}
             onClick={onClick}
             disabled={!isValid}
         >
