@@ -1,18 +1,29 @@
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useNavigate, NavigateFunction } from 'react-router-dom'
 import { Diary } from '../../../interface/diary'
 import { formatDate } from '../../../utils/formatDate'
 import { useDiaryValue } from '../../../provider/Diary'
+import useDiaryManager from '../../../hooks/useDiaryManager'
 
 type DiaryDetailPageParams = {
     id: string
 }
 
 export default function DiaryDetailPage() {
+    const navigate: NavigateFunction = useNavigate()
     const { id } = useParams<DiaryDetailPageParams>()
+    const { removeDiary } = useDiaryManager()
 
     const diary: Diary | undefined = useDiaryValue().find((d) => d.id === id)
     if (diary === undefined) {
         throw Error(`There's no diary id: ${id}`)
+    }
+
+    // 일기 삭제 핸들러
+    const onRemoveDiaryClick = () => {
+        if (id) {
+            removeDiary(id)
+            navigate('/')
+        }
     }
 
     return (
@@ -33,7 +44,9 @@ export default function DiaryDetailPage() {
                     <Link to={'/'} className="btn btn-green w-full">
                         새로운 일기 작성하기
                     </Link>
-                    <button className="btn btn-red w-full">현재 일기 삭제하기</button>
+                    <button className="btn btn-red w-full" onClick={onRemoveDiaryClick}>
+                        현재 일기 삭제하기
+                    </button>
                 </div>
             </div>
         </div>
