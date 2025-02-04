@@ -1,23 +1,12 @@
 import { Link } from 'react-router-dom'
 import { Diary } from '../../interface/diary'
 import { emotionEmoji, weatherEmoji } from '../../constants'
+import { formatDate } from '../../utils/formatDate'
 
 const EmojiIcon = ({ emoji }: { emoji: string }) => {
     return (
         <div className="w-6 h-6 p-1 flex items-center justify-center rounded-full border border-gray-100">{emoji}</div>
     )
-}
-
-const formatDate = (date: Date | string) => {
-    if (typeof date === 'string') {
-        date = new Date(date)
-    }
-
-    return new Intl.DateTimeFormat('ko-KR', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-    }).format(date)
 }
 
 const Card = ({ data }: { data: Diary }) => {

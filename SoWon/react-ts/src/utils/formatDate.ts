@@ -1,6 +1,6 @@
 type option = 'default' | 'verbose'
 
-export const formatDate = (date: Date | string, format: option) => {
+export const formatDate = (date: Date | string, format: option = 'default') => {
     if (typeof date === 'string') {
         date = new Date(date)
     }
