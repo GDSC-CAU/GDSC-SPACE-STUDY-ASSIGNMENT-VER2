@@ -17,7 +17,7 @@ export const formatDate = (date: Date | string, format: option = 'default') => {
     // option이 default
     return new Intl.DateTimeFormat('ko-KR', {
         year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
+        month: 'numeric',
+        day: 'numeric',
     }).format(date)
 }
