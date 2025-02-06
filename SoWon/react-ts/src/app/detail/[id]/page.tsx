@@ -3,6 +3,7 @@ import { Diary } from '../../../interface/diary'
 import { formatDate } from '../../../utils/formatDate'
 import { useDiaryValue } from '../../../provider/Diary'
 import useDiaryManager from '../../../hooks/useDiaryManager'
+import { useEffect } from 'react'
 
 type DiaryDetailPageParams = {
     id: string
@@ -11,12 +12,17 @@ type DiaryDetailPageParams = {
 export default function DiaryDetailPage() {
     const navigate: NavigateFunction = useNavigate()
     const { id } = useParams<DiaryDetailPageParams>()
-    const { removeDiary } = useDiaryManager()
+    const { updateDiary, removeDiary } = useDiaryManager()
 
     const diary: Diary | undefined = useDiaryValue().find((d) => d.id === id)
     if (diary === undefined) {
         throw Error(`There's no diary id: ${id}`)
     }
+
+    // 조회수 증가
+    useEffect(() => {
+        updateDiary(diary.id, { ...diary, views: diary.views + 1 })
+    }, [])
 
     // 일기 삭제 핸들러
     const onRemoveDiaryClick = () => {
