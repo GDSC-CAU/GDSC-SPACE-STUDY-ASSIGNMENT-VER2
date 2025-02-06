@@ -42,7 +42,9 @@ export default function DiaryDetailPage() {
                             {formatDate(diary.date, 'verbose')}
                         </div>
                         <div className="btn btn-gray w-full px-1.5 py-0.5 text-sm">{diary.weather}</div>
-                        <div className="btn btn-gray w-full px-1.5 py-0.5 text-sm">{diary.emotion}</div>
+                        <Link to={`/emotions/${diary.emotion}`} className="btn btn-gray w-full px-1.5 py-0.5 text-sm">
+                            {diary.emotion}
+                        </Link>
                     </div>
                 </div>
                 <div className="text-base text-gray-800 h-2/3">{diary.content}</div>
