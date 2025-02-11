@@ -16,3 +16,9 @@ export const deleteDiary = (id: string) => {
   const storedData = loadDiary()
   localStorage.setItem(DIARYKEY, JSON.stringify(storedData.filter((user) => user.id !== id)))
 }
+
+export const findDiary = (emotion: string): Diary[] => {
+  const storedData = loadDiary()
+  const resultData: Diary[] = storedData.filter((user) => user.emotion === emotion)
+  return resultData
+}

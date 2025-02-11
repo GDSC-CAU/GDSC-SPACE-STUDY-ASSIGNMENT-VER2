@@ -9,7 +9,7 @@ const EmojiLinkButton: React.FC<EmojiBtnProps> = ({ emotion }) => {
     const capitalizeFirstLetter = (str: string) => str.charAt(0).toUpperCase() + str.slice(1)
 
     return (
-        <Link to={`/emotions/${emotion}`}>
+        <Link to={`/emotions/${emotion.key}`}>
             <button className="group p-4 flex rounded-2xl border border-gray-50 hover:scale-110 hover:shadow-2xl transition-transform ease-in-out duration-400">
                 <div className={`text-6xl py-5 p-2 rounded-2xl border ${emotion.style} group-hover:shadow-inner`}>
                     {emotion.emoji}
