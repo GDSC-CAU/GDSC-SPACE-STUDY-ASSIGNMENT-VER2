@@ -28,3 +28,11 @@ export const findDiary = (emotion: string): Diary[] => {
   const resultData: Diary[] = storedData.filter((user) => user.emotion === emotion)
   return resultData
 }
+
+export const updateDiaryViews = (id: string) => {
+  const storedData = loadDiary()
+  const updatedData = storedData.map((diary) =>
+    diary.id === id ? { ...diary, views: (diary.views ?? 0) + 1 } : diary
+  )
+  localStorage.setItem(DIARYKEY, JSON.stringify(updatedData))
+}

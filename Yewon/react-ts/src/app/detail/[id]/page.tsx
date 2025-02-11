@@ -1,8 +1,8 @@
 import { Link, useParams } from 'react-router-dom'
 import { Diary } from '../../../interface/diary'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { formatDate } from '../../../util/dateUtil'
-import { deleteDiary, loadDiary } from '../../../util/diaryUtil'
+import { deleteDiary, loadDiary, updateDiaryViews } from '../../../util/diaryUtil'
 
 type DiaryDetailPageParams = {
     id: string
@@ -10,12 +10,22 @@ type DiaryDetailPageParams = {
 
 export default function DiaryDetailPage() {
     const { id } = useParams<DiaryDetailPageParams>()
-    const storedData = loadDiary()
     const [diary, setDiary] = useState<Diary | undefined>()
+    const hasUpdated = useRef(false)
 
     useEffect(() => {
-        setDiary(storedData.find((item) => item.id === id))
-    }, [])
+        if (!id) return
+        const storedDiaries = loadDiary()
+        const foundDiary = storedDiaries.find((d) => d.id === id) || null
+
+        if (foundDiary) {
+            if (!hasUpdated.current) {
+                updateDiaryViews(id)
+                hasUpdated.current = true
+            }
+            setDiary({ ...foundDiary, views: (foundDiary.views ?? 0) + 1 })
+        }
+    }, [id])
 
     return (
         <div className="w-2/4 h-full py-20">
