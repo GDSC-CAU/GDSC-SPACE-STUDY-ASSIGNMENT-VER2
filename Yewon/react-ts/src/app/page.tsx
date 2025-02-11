@@ -11,21 +11,6 @@ const weathers: Weather[] = ['sunny', 'cloud', 'rain', 'snow']
 
 export const DIARYKEY = 'diary-storage'
 
-function saveDiary(title: string, contents: string, selectedEmotion: Emotion, selectedWeather: Weather) {
-    const storedData: Diary[] = JSON.parse(localStorage.getItem(DIARYKEY)!) || []
-    const newDiaryObj = {
-        id: window.crypto.randomUUID(),
-        title: title,
-        content: contents,
-        date: new Date(),
-        emotion: selectedEmotion!,
-        weather: selectedWeather!,
-        views: 1,
-    }
-
-    localStorage.setItem(DIARYKEY, JSON.stringify([...storedData, newDiaryObj]))
-}
-
 const DiaryWriter = () => {
     const [title, setTitle] = useState('')
     const [contents, setContents] = useState('')
@@ -44,6 +29,20 @@ const DiaryWriter = () => {
     }
     const handleContentsChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setContents(e.target.value)
+    }
+
+    const saveDiary = (title: string, contents: string, selectedEmotion: Emotion, selectedWeather: Weather) => {
+        const storedData: Diary[] = JSON.parse(localStorage.getItem(DIARYKEY)!) || []
+        const newDiaryObj = {
+            id: window.crypto.randomUUID(),
+            title: title,
+            content: contents,
+            date: new Date(),
+            emotion: selectedEmotion!,
+            weather: selectedWeather!,
+            views: 1,
+        }
+        localStorage.setItem(DIARYKEY, JSON.stringify([...storedData, newDiaryObj]))
     }
 
     useEffect(() => {
