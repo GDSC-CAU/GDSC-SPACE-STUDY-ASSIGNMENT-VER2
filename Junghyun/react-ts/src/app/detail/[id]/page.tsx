@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom'
 import { useDiaryValue, useDiaryUpdate } from '../../../provider/Diary'
 import { Diary } from '../../../interface/diary'
+import { formatDate } from '../../../utils/formatDate'
 
 type DiaryDetailPageParams = {
     id: string
@@ -12,12 +13,7 @@ export default function DiaryDetailPage() {
     const diaries = useDiaryValue()
     const diary = diaries.find((diary) => diary.id === id)
     const updateDiaries = useDiaryUpdate()
-    const formattedDate = new Date(diary!.date).toLocaleDateString('ko-KR', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        weekday: 'long',
-    })
+    const formattedDate = formatDate(new Date(diary!.date), 'long')
 
     const handleDelete = () => {
         if (!diary || !id) return
@@ -50,7 +46,9 @@ export default function DiaryDetailPage() {
 
             <div className="flex h-1/2 text-xl">{diary!.content}</div>
             <div className="flex flex-row gap-2">
-                <button className="green-btn flex-1 p-2">새로운 일기 작성하기</button>
+                <button className="green-btn flex-1 p-2" onClick={() => navigate('/')}>
+                    새로운 일기 작성하기
+                </button>
                 <button className="red-btn flex-1 p-2" onClick={handleDelete}>
                     현재 일기 삭제하기
                 </button>
