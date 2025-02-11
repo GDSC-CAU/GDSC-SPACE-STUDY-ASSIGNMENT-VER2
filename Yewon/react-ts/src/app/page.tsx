@@ -2,14 +2,13 @@ import { useEffect, useState } from 'react'
 import { Diary } from '../interface/diary'
 import { Link } from 'react-router-dom'
 import { DiaryCard } from '../components/DiaryCard'
+import { loadDiary, updateDiary } from '../util/diaryUtil'
 
 type Emotion = Diary['emotion']
 type Weather = Diary['weather']
 
 const emotions: Emotion[] = ['bad', 'soso', 'good', 'great', 'awesome']
 const weathers: Weather[] = ['sunny', 'cloud', 'rain', 'snow']
-
-export const DIARYKEY = 'diary-storage'
 
 const DiaryWriter = () => {
     const [title, setTitle] = useState('')
@@ -32,7 +31,6 @@ const DiaryWriter = () => {
     }
 
     const saveDiary = (title: string, contents: string, selectedEmotion: Emotion, selectedWeather: Weather) => {
-        const storedData: Diary[] = JSON.parse(localStorage.getItem(DIARYKEY)!) || []
         const newDiaryObj = {
             id: window.crypto.randomUUID(),
             title: title,
@@ -42,7 +40,7 @@ const DiaryWriter = () => {
             weather: selectedWeather!,
             views: 1,
         }
-        localStorage.setItem(DIARYKEY, JSON.stringify([...storedData, newDiaryObj]))
+        updateDiary(newDiaryObj)
     }
 
     useEffect(() => {
@@ -108,7 +106,7 @@ const DiaryWriter = () => {
 }
 
 const DiaryStorage = () => {
-    const storedData: Diary[] = JSON.parse(localStorage.getItem(DIARYKEY)!) || []
+    const storedData = loadDiary()
 
     return (
         <div className="flex flex-col gap-4 p-4 rounded-lg bg-white border border-gray-100 h-2/3 min-h-[20rem]">
