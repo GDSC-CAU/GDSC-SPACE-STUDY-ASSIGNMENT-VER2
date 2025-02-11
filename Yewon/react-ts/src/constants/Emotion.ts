@@ -1,4 +1,4 @@
-export const EmotionIcon = [
+export const Emotion = [
     { key: 'bad', emoji: '🤬', color: 'red', description: '최악의 하루였어요.' },
     { key: 'soso', emoji: '😗', color: 'purple', description: '괜찮은 하루였어요.' },
     { key: 'good', emoji: '😙', color: 'green', description: '좋은 하루였어요.' },
