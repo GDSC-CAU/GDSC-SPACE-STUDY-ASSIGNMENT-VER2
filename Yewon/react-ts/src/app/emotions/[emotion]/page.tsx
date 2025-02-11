@@ -1,27 +1,31 @@
 import { Link, useParams } from 'react-router-dom'
-import { Diary } from '../../../interface/diary'
-import { findDiary, loadDiary } from '../../../util/diaryUtil'
+import { findDiary, deleteDiaries } from '../../../util/diaryUtil'
 import { useEffect, useState } from 'react'
 import { formatDate } from '../../../util/dateUtil'
 import { Emotion } from '../../../constants/Emotion'
+import { Diary } from '../../../interface/diary'
 
 type EmotionPageParams = {
     emotion: string
 }
 export default function EmotionPage() {
     const { emotion } = useParams<EmotionPageParams>()
-    const resultData = findDiary(emotion ?? '')
+    const [diaries, setDiaries] = useState<Diary[]>(findDiary(emotion ?? ''))
     const [selectedIDs, setSelectedIDs] = useState<string[]>([])
     const [isValid, setValid] = useState(false)
-    const isResultDataExists = resultData.length > 0
-
-    function deleteDiaries() {}
+    const isResultDataExists = diaries.length > 0
 
     useEffect(() => {
         setValid(selectedIDs.length > 0)
     }, [selectedIDs])
 
     const emotionObject = Emotion.find((e) => e.key === emotion)
+
+    const handleDelete = () => {
+        deleteDiaries(selectedIDs)
+        setDiaries((prevDiaries) => prevDiaries.filter((diary) => !selectedIDs.includes(diary.id)))
+        setSelectedIDs([])
+    }
 
     return (
         <div className="flex flex-col gap-10 w-full md:w-2/3 items-start">
@@ -34,8 +38,11 @@ export default function EmotionPage() {
                 </div>
             </div>
 
-            {resultData.map((diary, index) => (
-                <div className="flex flex-row items-center justify-between gap-4 w-full border border-gray-100 rounded-lg p-2">
+            {diaries.map((diary, index) => (
+                <div
+                    key={index}
+                    className="flex flex-row items-center justify-between gap-4 w-full border border-gray-100 rounded-lg p-2"
+                >
                     <input
                         type="checkbox"
                         className="w-4 h-4 accent-gray-50"
@@ -63,7 +70,7 @@ export default function EmotionPage() {
             {isResultDataExists ? (
                 <button
                     className={`${isValid ? 'p-3 red-btn w-full' : 'p-3 default-btn w-full'}`}
-                    onClick={deleteDiaries}
+                    onClick={handleDelete}
                     disabled={!isValid}
                 >
                     {isValid ? `선택된 ${selectedIDs.length}개의 일기를 삭제합니다` : '선택된 일기가 없습니다'}
