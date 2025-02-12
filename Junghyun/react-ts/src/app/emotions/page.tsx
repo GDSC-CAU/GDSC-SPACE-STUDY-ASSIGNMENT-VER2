@@ -1,12 +1,6 @@
 import EmotionCard from '../../components/EmotionCard'
-
-const EMOTIONS = [
-    { emoji: '😆', title: 'Awesome', description: '최고의 하루였어요', bgColor: 'bg-yellow-50' },
-    { emoji: '😊', title: 'Great', description: '멋진 하루였어요', bgColor: 'bg-blue-50' },
-    { emoji: '😙', title: 'Good', description: '좋은 하루였어요', bgColor: 'bg-green-50' },
-    { emoji: '🙂', title: 'Soso', description: '괜찮은 하루였어요', bgColor: 'bg-purple-50' },
-    { emoji: '🤬', title: 'Bad', description: '최악의 하루였어요', bgColor: 'bg-red-50' },
-]
+import { EMOTION_DATA } from '../../constants'
+import { Diary } from '../../interface/diary'
 
 export default function EmotionLinkPage() {
     return (
@@ -16,8 +10,8 @@ export default function EmotionLinkPage() {
                 <span className="text-gray-400">나만의 감정을 돌아보고 생각에 잠겨보아요 :)</span>
             </div>
             <div className="grid grid-cols-2 gap-5 justify-center items-center">
-                {EMOTIONS.map((emotion) => (
-                    <EmotionCard key={emotion.title} {...emotion} />
+                {Object.keys(EMOTION_DATA).map((emotion) => (
+                    <EmotionCard key={emotion} emotion={emotion as Diary['emotion']} />
                 ))}
             </div>
         </div>
