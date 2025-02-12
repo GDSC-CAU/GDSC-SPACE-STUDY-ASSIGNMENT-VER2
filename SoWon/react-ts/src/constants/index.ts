@@ -16,3 +16,11 @@ export const weatherEmoji: Record<Diary['weather'], string> = {
     snow: '❄️',
     sunny: '☀️',
 }
+
+export const EMOTION: { key: string; emoji: string; description: string; color: string }[] = [
+    { key: 'awesome', emoji: '😎', description: '최고의 하루였어요', color: 'yellow' },
+    { key: 'great', emoji: '😃', description: '멋진 하루였어요', color: 'blue' },
+    { key: 'good', emoji: '😙', description: '좋은 하루였어요', color: 'green' },
+    { key: 'soso', emoji: '😗', description: '괜찮은 하루였어요', color: 'purple' },
+    { key: 'bad', emoji: '🤬', description: '최악의 하루였어요!', color: 'red' },
+]

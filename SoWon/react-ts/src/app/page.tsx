@@ -1,4 +1,4 @@
-import { useState, useEffect, FormEvent } from 'react'
+import { useState, useEffect, FormEvent, useRef } from 'react'
 import { Diary } from '../interface/diary'
 import { Link } from 'react-router-dom'
 import { Button } from '../components/Button'
@@ -20,6 +20,12 @@ const DiaryWriter = () => {
     const minTitleLength: number = 3
     const minContentLength: number = 6
 
+    const titleRef = useRef<HTMLInputElement>(null)
+
+    // 제목 입력 필드에 DOM 시점 고정
+    useEffect(() => titleRef.current?.focus(), [])
+
+    // 입력 폼 유효성 검사
     useEffect(() => {
         const hasInvalidFields =
             title.length < minTitleLength ||
@@ -30,6 +36,7 @@ const DiaryWriter = () => {
         setIsValid(!hasInvalidFields)
     }, [title, content, weather, emotion])
 
+    // 입력 폼 필드 값 리셋 함수
     const resetDiaryValue = () => {
         setTitle('')
         setContent('')
@@ -66,6 +73,7 @@ const DiaryWriter = () => {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="제목을 적어보세요"
+                ref={titleRef}
             />
             <div className="flex flex-col gap-2 pt-4">
                 <div className="flex flex-row gap-1">
@@ -73,7 +81,7 @@ const DiaryWriter = () => {
                         <button
                             key={index}
                             type="button"
-                            className={emotion === e ? 'btn btn-emotion' : 'btn btn-invalid px-1.5 py-0.5 text-sm'}
+                            className={`btn ${emotion === e ? 'btn-green' : 'btn-gray'} px-1.5 py-0.5 text-sm`}
                             onClick={() => setEmotion(e)}
                         >
                             {e}
@@ -85,7 +93,7 @@ const DiaryWriter = () => {
                         <button
                             key={index}
                             type="button"
-                            className={weather === w ? 'btn btn-weather' : 'btn btn-invalid px-1.5 py-0.5 text-sm'}
+                            className={`btn ${weather === w ? 'btn-blue' : 'btn-gray'} px-1.5 py-0.5 text-sm`}
                             onClick={() => setWeather(w)}
                         >
                             {w}
@@ -109,7 +117,7 @@ const DiaryHistory = () => {
         <div className="w-full flex flex-col items-start gap-4 p-4 justify-between rounded-lg bg-white border border-gray-100 h-2/3 min-h-[20rem]">
             <h1 className="text-xl mt-5 text-emerald-600">기록된 일기</h1>
             <DiaryCardList diary={useDiaryValue()} />
-            <Link to="/emotions" className="btn btn-valid w-full">
+            <Link to="/emotions" className="btn btn-green w-full">
                 감정 모아보기
             </Link>
         </div>
