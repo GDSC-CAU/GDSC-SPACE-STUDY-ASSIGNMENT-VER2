@@ -1,8 +1,8 @@
 import { Link, useParams } from 'react-router-dom'
 import { Diary } from '../../../interface/diary'
-import { DIARYKEY } from '../../../app/page'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { formatDate } from '../../../util/dateUtil'
+import { deleteDiary, loadDiary, updateDiaryViews } from '../../../util/diaryUtil'
 
 type DiaryDetailPageParams = {
     id: string
@@ -10,16 +10,22 @@ type DiaryDetailPageParams = {
 
 export default function DiaryDetailPage() {
     const { id } = useParams<DiaryDetailPageParams>()
-    const storedData: Diary[] = JSON.parse(localStorage.getItem(DIARYKEY)!) || []
     const [diary, setDiary] = useState<Diary | undefined>()
-
-    const deleteDiary = () => {
-        localStorage.setItem(DIARYKEY, JSON.stringify(storedData.filter((user) => user.id !== id)))
-    }
+    const hasUpdated = useRef(false)
 
     useEffect(() => {
-        setDiary(storedData.find((item) => item.id === id))
-    }, [])
+        if (!id) return
+        const storedDiaries = loadDiary()
+        const foundDiary = storedDiaries.find((d) => d.id === id) || null
+
+        if (foundDiary) {
+            if (!hasUpdated.current) {
+                updateDiaryViews(id)
+                hasUpdated.current = true
+            }
+            setDiary({ ...foundDiary, views: (foundDiary.views ?? 0) + 1 })
+        }
+    }, [id])
 
     return (
         <div className="w-2/4 h-full py-20">
@@ -41,7 +47,7 @@ export default function DiaryDetailPage() {
                     <button className="green-btn w-full p-2">새로운 일기 작성하기</button>
                 </Link>
                 <Link to="/" className="w-full">
-                    <button className="red-btn w-full p-2" onClick={() => deleteDiary()}>
+                    <button className="red-btn w-full p-2" onClick={() => deleteDiary(id ?? '')}>
                         현재 일기 삭제하기
                     </button>
                 </Link>
