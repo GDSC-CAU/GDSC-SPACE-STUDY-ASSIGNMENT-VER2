@@ -1,4 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
 import { useDiaryValue, useDiaryUpdate } from '../../../provider/Diary'
 import { Diary } from '../../../interface/diary'
 import { formatDate } from '../../../utils/formatDate'
@@ -15,6 +16,17 @@ export default function DiaryDetailPage() {
     const updateDiaries = useDiaryUpdate()
     const formattedDate = formatDate(new Date(diary!.date), 'long')
 
+    // 조회수 증가
+    useEffect(() => {
+        if (diary)
+            updateDiaries((prev: Diary[]) => {
+                const newDiaries = prev.map((diary) => (diary.id === id ? { ...diary, views: diary.views + 1 } : diary))
+                localStorage.setItem('diaries', JSON.stringify(newDiaries))
+                return newDiaries
+            })
+    }, [id, diary, updateDiaries])
+
+    // 현재 일기 삭제
     const handleDelete = () => {
         if (!diary || !id) return
 
