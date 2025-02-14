@@ -17,7 +17,9 @@ export const EmojiBox = ({ emotion }: EmotionProps) => {
     }
 
     return (
-        <div className={`flex w-24 h-24 text-6xl justify-center items-center ${bgColorMap[color]} rounded-2xl`}>
+        <div
+            className={`flex w-24 h-24 text-6xl justify-center items-center ${bgColorMap[color]} rounded-2xl transition-all duration-300`}
+        >
             {emoji}
         </div>
     )
