@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { useDiaryValue } from '../../../provider/Diary'
+import { useDiaryValue, useDiaryUpdate } from '../../../provider/Diary'
 import { EmojiBox } from '../../../components/EmotionCard'
 import { Diary } from '../../../interface/diary'
 import { EMOTION_DATA } from '../../../constants'
@@ -13,11 +13,23 @@ type EmotionPageParams = {
 export default function EmotionPage() {
     const { emotion } = useParams<EmotionPageParams>()
     const diaries = useDiaryValue()
+    const updateDiaries = useDiaryUpdate()
     const filteredDiaries = diaries.filter((diary) => diary.emotion === emotion)
     const [selectedDiaries, setSelectedDiaries] = useState<Diary[]>([])
 
     const handleCheckbox = (diary: Diary) => {
         setSelectedDiaries((prev) => (prev.includes(diary) ? prev.filter((d) => d !== diary) : [...prev, diary]))
+    }
+
+    const handleDelete = () => {
+        if (selectedDiaries.length === 0) return
+
+        updateDiaries((prev: Diary[]) => {
+            const newDiaries = prev.filter((diary) => !selectedDiaries.includes(diary))
+            localStorage.setItem('diaries', JSON.stringify(newDiaries))
+            return newDiaries
+        })
+        setSelectedDiaries([])
     }
 
     return (
@@ -52,9 +64,13 @@ export default function EmotionPage() {
                         </div>
                     ))}
                     <button
-                        className={`flex w-full items-center justify-center p-2 mt-5 ${selectedDiaries.length > 0 ? 'green-btn' : 'gray-btn'}`}
+                        className={`flex w-full items-center justify-center p-2 mt-5 transition-all duration-300 ${selectedDiaries.length > 0 ? 'red-btn' : 'gray-btn'}`}
+                        onClick={handleDelete}
+                        disabled={selectedDiaries.length === 0}
                     >
-                        선택된 일기가 없습니다
+                        {selectedDiaries.length > 0
+                            ? `선택한 ${selectedDiaries.length}개의 일기를 삭제합니다`
+                            : '선택된 일기가 없습니다'}
                     </button>
                 </div>
             ) : (
