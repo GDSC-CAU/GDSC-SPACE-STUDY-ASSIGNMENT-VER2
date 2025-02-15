@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useDiaryValue, useDiaryUpdate } from '../../../provider/Diary'
 import { Diary } from '../../../interface/diary'
 import { formatDate } from '../../../utils/formatDate'
@@ -15,16 +15,20 @@ export default function DiaryDetailPage() {
     const diary = diaries.find((diary) => diary.id === id)
     const updateDiaries = useDiaryUpdate()
     const formattedDate = formatDate(new Date(diary!.date), 'long')
+    const hasViewed = useRef(false)
 
     // 조회수 증가
     useEffect(() => {
-        if (diary)
-            updateDiaries((prev: Diary[]) => {
-                const newDiaries = prev.map((diary) => (diary.id === id ? { ...diary, views: diary.views + 1 } : diary))
-                localStorage.setItem('diaries', JSON.stringify(newDiaries))
-                return newDiaries
-            })
-    }, [id, diary, updateDiaries])
+        if (!diary || hasViewed.current) return
+
+        hasViewed.current = true
+        updateDiaries((prev: Diary[]) => {
+            const newDiaries = prev.map((diary) => (diary.id === id ? { ...diary, views: diary.views + 1 } : diary))
+            localStorage.setItem('diaries', JSON.stringify(newDiaries))
+
+            return newDiaries
+        })
+    }, [id, updateDiaries])
 
     // 현재 일기 삭제
     const handleDelete = () => {
@@ -52,7 +56,9 @@ export default function DiaryDetailPage() {
                 <div className="flex flex-row gap-2">
                     <button className="gray-btn flex-1">{formattedDate}</button>
                     <button className="gray-btn flex-1">{diary!.weather}</button>
-                    <button className="gray-btn flex-1">{diary!.emotion}</button>
+                    <button className="gray-btn flex-1" onClick={() => navigate(`/emotions/${diary!.emotion}`)}>
+                        {diary!.emotion}
+                    </button>
                 </div>
             </div>
 

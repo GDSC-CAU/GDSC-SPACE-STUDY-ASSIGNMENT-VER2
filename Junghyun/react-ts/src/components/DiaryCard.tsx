@@ -7,10 +7,10 @@ export default function DiaryCard({ title, date, emotion, weather, id }: Diary) 
 
     const emotionEmoji = {
         bad: '🤬',
-        soso: '😙',
-        good: '😊',
-        great: '😃',
-        awesome: '😎',
+        soso: '🙂',
+        good: '😙',
+        great: '😊',
+        awesome: '😆',
     }
 
     const weatherEmoji = {
