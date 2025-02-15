@@ -7,7 +7,7 @@ import { EMOTION_DATA } from '../../../constants'
 import { formatDate } from '../../../utils/formatDate'
 
 type EmotionPageParams = {
-    emotion: string
+    emotion: Diary['emotion']
 }
 
 export default function EmotionPage() {
@@ -23,8 +23,8 @@ export default function EmotionPage() {
     return (
         <div className="flex flex-col w-2/3 items-start gap-10">
             <div className="flex flex-row items-center justify-center gap-5">
-                <EmojiBox emotion={emotion as Diary['emotion']} />
-                <h1 className="text-2xl font-medium">{EMOTION_DATA[emotion as Diary['emotion']].description}</h1>
+                <EmojiBox emotion={emotion!} />
+                <h1 className="text-2xl font-medium">{EMOTION_DATA[emotion!].description}</h1>
             </div>
             {filteredDiaries.length > 0 ? (
                 <div className="flex flex-col justify-center w-full gap-5">
@@ -44,7 +44,10 @@ export default function EmotionPage() {
                                 className="flex flex-row justify-between w-full hover:bg-gray-100 px-2 rounded-lg"
                             >
                                 <div className="flex">{diary.title}</div>
-                                <div className="text-gray-400">{formatDate(new Date(diary.date), 'short')}</div>
+                                <div className="flex flex-row gap-2">
+                                    <div className="text-gray-400">{formatDate(new Date(diary.date), 'short')}</div>
+                                    <div className="text-gray-400">{`조회수: ${diary.views}`}</div>
+                                </div>
                             </Link>
                         </div>
                     ))}
